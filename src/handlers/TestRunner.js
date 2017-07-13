@@ -1,5 +1,8 @@
+let beforeEachCallback = () => {};
+
 module.exports = {
-    run: function(message, expected, method, actual) {
+
+    run: function(message, actual, method, expected) {
         try {
             method(expected, actual);
             console.log("PASS: " + message);
@@ -11,5 +14,12 @@ module.exports = {
         }
 
         console.log("");
+
+        beforeEachCallback();
+    },
+
+    beforeEach: function(callback) {
+        beforeEachCallback = callback;
+        callback();
     }
 };
