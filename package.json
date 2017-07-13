@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "find \"$PWD\" -type f | grep \".spec.js\" | while read -r line ; do node \"$line\"; done"
+    "test": "find \"$PWD\" -type f | grep \".spec.js\" | while read -r line ; do node \"$line\"; done",
+    "start": "node index.js"
   },
   "author": "jonathan adamski",
   "license": "ISC"
