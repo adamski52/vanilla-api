@@ -1,6 +1,7 @@
 const assert = require("assert"),
-      TestRunner = require("../handlers/TestRunner"),
+      TestRunner = require("../helpers/TestRunner"),
       IteratorsStore = require("./IteratorsStore"),
+      StoreSystem = require("../helpers/StoreSystem"),
       mockFs = {
           readFile: function(file, callback) {
               callback(undefined, mockData);
@@ -13,7 +14,7 @@ const assert = require("assert"),
       };
 
 
-let iterator = new IteratorsStore(mockFs),
+let iterator = new IteratorsStore(StoreSystem, mockFs),
     mockData,
     mockDataObj;
 
