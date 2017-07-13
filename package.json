@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "find \"$PWD\" -type f | grep \".spec.js\" | while read -r line ; do node \"$line\"; done"
   },
   "author": "jonathan adamski",
   "license": "ISC"
