@@ -1,8 +1,8 @@
 let ss,
     file = "_secure/stores/iterators.json";
 
-class IteratorsStore {
-    constructor(StoreSystem = require("../helpers/StoreSystem"),
+class Iterator {
+    constructor(StoreSystem = require("../../Utils/StoreSystem"),
                 fs = require("fs")) {
 
         ss = new StoreSystem(fs);
@@ -31,4 +31,4 @@ class IteratorsStore {
     }
 }
 
-module.exports = IteratorsStore;
+module.exports = Iterator;

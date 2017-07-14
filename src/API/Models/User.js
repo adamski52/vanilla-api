@@ -4,10 +4,10 @@ let storeSystem,
     storePath = "_secure/stores/users/";
 
 
-class UserStore {
-    constructor(StoreSystem = require("../helpers/StoreSystem"),
+class User {
+    constructor(StoreSystem = require("../../Utils/StoreSystem"),
                 _fs = require("fs"),
-                CryptKeeper = require("../helpers/CryptKeeper")) {
+                CryptKeeper = require("../../Utils/CryptKeeper")) {
         fs = _fs;
 
         storeSystem = new StoreSystem();
@@ -37,4 +37,4 @@ class UserStore {
     }
 }
 
-module.exports = UserStore;
+module.exports = User;

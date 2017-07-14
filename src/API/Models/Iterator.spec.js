@@ -1,11 +1,11 @@
 const assert = require("assert"),
-      TestRunner = require("../helpers/TestRunner"),
-      IteratorsStore = require("./IteratorsStore"),
-      StoreSystem = require("../helpers/StoreSystem"),
-      MockFileSystem = require("../helpers/MockFileSystem");
+      TestRunner = require("../../Utils/TestRunner"),
+      Iterator = require("./Iterator"),
+      StoreSystem = require("../../Utils/StoreSystem"),
+      MockFileSystem = require("../../../_mocks/MockFileSystem");
 
 
-let iterator = new IteratorsStore(StoreSystem, MockFileSystem),
+let iterator = new Iterator(StoreSystem, MockFileSystem),
     mockData;
 
 TestRunner.beforeEach(() => {

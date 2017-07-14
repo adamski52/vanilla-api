@@ -1,5 +1,5 @@
 const assert = require("assert"),
-    TestRunner = require("./TestRunner"),
+    TestRunner = require("./../helpers/TestRunner"),
     CryptKeeper = require("./CryptKeeper");
 
 
