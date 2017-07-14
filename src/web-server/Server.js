@@ -1,7 +1,11 @@
 const https = require("https"),
       fs = require("fs"),
-      crypto = require("crypto");
+      crypto = require("crypto"),
+      Router = require("./Router");
 
+let router = new Router();
+router.addRoute("/api/user/login", "POST");
+router.addRoute("/api/user/([0-9]+)", "GET");
 
 module.exports = {
     start(port = 4242) {
@@ -9,8 +13,7 @@ module.exports = {
             key: fs.readFileSync("_secure/keys/key.pem"),
             cert: fs.readFileSync("_secure/keys/cert.pem")
         }, (req, res) => {
-            res.writeHead(200);
-            res.end("great success");
+            new Router().handleRequest(req, res);
         }).listen(port);
 
         console.log("server running on :" + port);
