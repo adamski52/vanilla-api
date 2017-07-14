@@ -1,5 +1,5 @@
 const assert = require("assert"),
-    TestRunner = require("../Utils/TestRunner"),
+    TestRunner = require("../TestRunner"),
     Router = require("./Router");
 
 let router = new Router(),
