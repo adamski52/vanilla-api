@@ -18,23 +18,30 @@ class CryptKeeper {
         return hash.digest(hashOutputEncoding);
     }
 
-    encrypt(plainText, salt) {
-        let cipher = crypto.createCipher(cipherAlgorithm, salt),
-            cipherText = cipher.update(JSON.stringify(plainText), cipherInputEncoding, cipherOutputEncoding) + cipher.final(cipherOutputEncoding);
+    encrypt(plainText, salt, callback) {
+        try {
+            let cipher = crypto.createCipher(cipherAlgorithm, salt),
+                cipherText = cipher.update(JSON.stringify(plainText), cipherInputEncoding, cipherOutputEncoding) + cipher.final(cipherOutputEncoding);
 
-        return cipherText;
+            callback(undefined, cipherText);
+            return;
+        }
+        catch(err) {
+            callback(err, undefined);
+        }
     }
 
-    decrypt(cipherText, pepper) {
+    decrypt(cipherText, salt, callback) {
         try {
-            var decipher = crypto.createDecipher(cipherAlgorithm, pepper),
+            var decipher = crypto.createDecipher(cipherAlgorithm, salt),
                 plainText = decipher.update(cipherText, cipherOutputEncoding, cipherInputEncoding) + decipher.final(cipherInputEncoding);
-        }
-        catch(e) {
-            return "";
-        }
 
-        return plainText;
+            callback(undefined, plainText);
+            return;
+        }
+        catch(err) {
+            callback(err, undefined);
+        }
     }
 }
 

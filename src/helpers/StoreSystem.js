@@ -6,12 +6,13 @@ class StoreSystem {
     }
 
     read(file, callback) {
-        fs.readFile(file, (err, data) => {
+        fs.readFile(file, "utf8", (err, data) => {
             if(err) {
-                throw err;
+                callback(err, undefined);
+                return;
             }
 
-            callback(JSON.parse(data));
+            callback(undefined, data);
         });
     }
 
@@ -20,10 +21,11 @@ class StoreSystem {
             let newData = Object.assign({}, data, element);
             fs.writeFile(file, JSON.stringify(newData), (err) => {
                 if (err) {
-                    throw err;
+                    callback(err, undefined);
+                    return;
                 }
 
-                callback(newData);
+                callback(undefined, newData);
             });
         });
     }

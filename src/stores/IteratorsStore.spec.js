@@ -2,51 +2,41 @@ const assert = require("assert"),
       TestRunner = require("../helpers/TestRunner"),
       IteratorsStore = require("./IteratorsStore"),
       StoreSystem = require("../helpers/StoreSystem"),
-      mockFs = {
-          readFile: function(file, callback) {
-              callback(undefined, mockData);
-          },
-          writeFile: function(file, data, callback) {
-              mockData = data;
-
-              callback();
-          }
-      };
+      MockFileSystem = require("../helpers/MockFileSystem");
 
 
-let iterator = new IteratorsStore(StoreSystem, mockFs),
-    mockData,
-    mockDataObj;
+let iterator = new IteratorsStore(StoreSystem, MockFileSystem),
+    mockData;
 
 TestRunner.beforeEach(() => {
-    mockDataObj = {
+    mockData = {
         "GLOBAL":{
             "current":15,
             "delta":1
         }
     };
 
-    mockData = JSON.stringify(mockDataObj);
+    MockFileSystem.setMockData(JSON.stringify(mockData));
 });
 
 
-iterator.getIterator((value) => {
+iterator.getIterator((err, value) => {
     TestRunner.run("Should retrieve the next iterator", value, assert.strictEqual, 16);
 });
 
 
 iterator.getIterator(() => {
-    iterator.getIterator((value) => {
+    iterator.getIterator((err, value) => {
         TestRunner.run("Should save the incremented iterator", value, assert.strictEqual, 17);
     });
 });
 
 
-iterator.getIterator((value) => {
+iterator.getIterator((err, value) => {
     let prevValue = value;
 
-    iterator.getIterator((value) => {
-        TestRunner.run("Should increment by delta", value - prevValue, assert.strictEqual, mockDataObj.GLOBAL.delta);
+    iterator.getIterator((err, value) => {
+        TestRunner.run("Should increment by delta", value - prevValue, assert.strictEqual, mockData.GLOBAL.delta);
     });
 });
 

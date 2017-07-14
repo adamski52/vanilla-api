@@ -9,8 +9,8 @@ module.exports = {
         }
         catch(e) {
             console.error("FAIL: " + message);
-            console.error("   Expected: " + expected.toString());
-            console.error("   Got: " + actual.toString());
+            console.error("   Expected: " + expected);
+            console.error("   Got: " + actual);
         }
 
         console.log("");

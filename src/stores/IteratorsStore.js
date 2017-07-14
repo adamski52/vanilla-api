@@ -9,11 +9,23 @@ class IteratorsStore {
     }
 
     getIterator(callback) {
-        ss.read(file, (data) => {
+        ss.read(file, (err, data) => {
+            if(err) {
+                callback(err, undefined);
+                return;
+            }
+
+            data = JSON.parse(data);
+
             data.GLOBAL.current += data.GLOBAL.delta;
 
-            ss.write(file, data, () => {
-                callback(data.GLOBAL.current);
+            ss.write(file, data, (err, data) => {
+                if(err) {
+                    callback(err, undefined);
+                    return;
+                }
+
+                callback(undefined, data.GLOBAL.current);
             });
         });
     }

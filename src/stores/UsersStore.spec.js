@@ -1,33 +1,11 @@
 const assert = require("assert"),
       TestRunner = require("../helpers/TestRunner"),
       UsersStore = require("./UsersStore"),
-      StoreSystem = require("../helpers/StoreSystem"),
-      mockFs = {
-          readFile: function(file, callback) {
-              callback(undefined, mockData);
-          },
-          writeFile: function(file, data, callback) {
-              mockData = data;
+      fs = require("fs");
 
-              callback();
-          }
-      };
+let userStore = new UsersStore();
 
-
-let iterator = new UsersStore(StoreSystem, mockFs),
-    mockData,
-    mockDataObj;
-
-TestRunner.beforeEach(() => {
-    mockDataObj = {
-        "id": 123,
-        "username": "user"
-    };
-
-    mockData = JSON.stringify(mockDataObj);
-});
-
-
-iterator.getUser(credential, (user) => {
-    TestRunner.run("Should retrieve the user object if un/pw is valid", user, assert.deepStrictEqual, mockDataObj);
+//fs.writeFileSync("_secure/stores/users/73ebfa193babfa8f594fcd9c47d3f9e094b49c91555d219e7399ebaf66d8bed0.json", "b5253129330f4afa17292733fa81803149ca6e6b96e62add2ef359c808e5d566");
+userStore.login("adamski", "password", (err, user) => {
+    TestRunner.run("Should return a user object upon valid login", user.username, assert.strictEqual, "adamski");
 });
