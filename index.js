@@ -1,4 +1,4 @@
-const Server = require("./src/web-server/Server");
+const Server = require("./src/Utils/Server");
 
 Server.start();
 
