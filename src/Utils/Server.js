@@ -1,7 +1,7 @@
 const https = require("https"),
       fs = require("fs"),
       crypto = require("crypto"),
-      Router = require("./../Router/Router");
+      Router = require("./Router/Router");
 
 let router = new Router();
 router.addRoute("/api/user/login", "POST");
