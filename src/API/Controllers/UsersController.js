@@ -1,19 +1,29 @@
 const ApiController = require("./ApiController");
 
-let User;
+let User,
+    router,
+    routeConfigs = [{
+        key: "users_url",
+        pattern: "/api/users",
+        methods: ["POST", "GET"]
+    }];
 
 class UsersController extends ApiController {
-    constructor(router, _User = require("../Models/User")) {
+    constructor(_r, _User = require("../Models/User")) {
         super();
+        router = _r;
         User = _User;
-        router.addRoute("users_url", "/api/users", ["POST", "GET"], (req, res, params) => {
-            this.routeRequest(req, res, params);
+
+        routeConfigs.forEach((route) => {
+            router.addRoute(route, (req, res, params) => {
+                this.routeRequest(req, res, params);
+            });
         });
     }
 
 
     get(req, res, params) {
-        res.end("get!");
+        res.end("HI!");
     }
 
     post(req, res, params, body) {
@@ -25,7 +35,7 @@ class UsersController extends ApiController {
                 return this.fail(res, err);
             }
 
-            res.write(JSON.stringify(userObj));
+            res.end(JSON.stringify(userObj));
         });
     }
 }

@@ -1,4 +1,9 @@
-let routes = [];
+let routes = [],
+    routeConfigs = [{
+        key: "root",
+        pattern: "(.*)",
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+    }];
 
 function getRoute(path, method) {
     return routes.find((route) => {
@@ -20,28 +25,27 @@ function execute(route, req, res) {
 
 class Router {
     constructor() {
-        this.addRoute("root", "(.*)", ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], handle404);
+        routeConfigs.forEach((route) => {
+            this.addRoute(route, handle404);
+        });
     }
 
-    addRoute(name, pattern, methods, handler) {
-        let isNew = false,
-            route = routes.find((r) => {
-                return r.pattern === pattern;
-            });
+    addRoute(routeOptions, handler) {
+        let route = routes.find((r) => {
+            return r.pattern === routeOptions.pattern;
+        });
 
-        if(!route) {
-            isNew = true;
-            route = {};
+        if(route) {
+            route.handler = handler;
+            route.pattern = routeOptions.pattern;
+            route.key = routeOptions.key;
+            route.methods = routeOptions.methods;
+            return routes;
         }
 
-        route.name = name;
-        route.pattern = pattern;
-        route.methods = methods;
-        route.handler = handler;
 
-        if(isNew) {
-            routes.unshift(route);
-        }
+        routeOptions.handler = handler;
+        routes.unshift(routeOptions);
 
         return routes;
     }
