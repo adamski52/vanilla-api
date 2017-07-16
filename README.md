@@ -40,7 +40,50 @@ DELETE /api/users/login
 
 No payload necessary (uses session cookie)
 
+## Configuration Read (all) (must be authenticated)
+GET /api/configurations
 
+
+
+## Configuration Create (must be authenticated)
+POST /api/configurations
+
+With payload of:
+```
+   {
+       "name" : "host1",
+       "hostname" : "nessus-ntp.lab.com",
+       "port" : 1241,
+       "username" : "toto"
+   }
+```
+(`name` must be unique)
+
+
+## Configuration Update (must be authenticated)
+PUT /api/configurations
+
+With payload of:
+```
+   {
+       "name" : "host1",
+       "hostname" : "nessus-ntp.lab.com",
+       "port" : 1241,
+       "username" : "toto"
+   }
+```
+
+(`name` must match an existing Configuration)
+
+
+## Configuration Delete (must be authenticated)
+DELETE /api/configurations
+With payload of:
+```
+   {
+       "name" : "host1"
+   }
+```
 
 # Problem Statement:
 
