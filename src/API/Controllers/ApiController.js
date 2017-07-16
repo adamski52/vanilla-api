@@ -17,6 +17,10 @@ class ApiController {
         if(this[method]) {
             parseReqBody(req, (body) => {
                 try {
+                    if(body) {
+                        body = JSON.parse(body);
+                    }
+
                     this[method](req, res, params, body);
                 }
                 catch(err) {
@@ -33,7 +37,10 @@ class ApiController {
 
     fail(res, err, statusCode = 400) {
         res.statusCode = statusCode;
-        res.end(err.message || "An error occurred.");
+        res.end(JSON.stringify({
+            error: err.message || "An error occurred.",
+            stack: err.stack
+        }));
     }
 
 
@@ -44,6 +51,19 @@ class ApiController {
 
     get(req, res, params) {
         res.end();
+    }
+
+    requireAuthentication(req, res, session, callback) {
+        session.getUserAuthentication(req, (isAuthenticated) => {
+            if (!isAuthenticated) {
+                this.fail(res, {
+                    message: "Authentication required."
+                }, 401);
+                return;
+            }
+
+            callback();
+        });
     }
 }
 

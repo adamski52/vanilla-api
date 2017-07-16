@@ -1,5 +1,9 @@
 module.exports = {
     nom: function(req) {
+        if(!req.headers.cookie) {
+            return {};
+        }
+
         let rawCookies = req.headers.cookie.split(";"),
             keyValuePair,
             cookies = {};

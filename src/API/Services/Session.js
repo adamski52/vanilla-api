@@ -1,13 +1,18 @@
 let fs,
     crypto,
     sessionPath,
+    CookieMonster,
+    CryptKeeper,
     storePath = "_secure/stores/sessions/";
 
 class Session {
     constructor(_fs = require("fs"),
-                _crypto = require("crypto")) {
+                _crypto = require("crypto"),
+                _CryptKeeper = require("../../Utils/CryptKeeper"),
+                _CookieMonster = require("../../Utils/CookieMonster")) {
         fs = _fs;
-
+        CookieMonster = _CookieMonster;
+        CryptKeeper = _CryptKeeper;
         crypto = _crypto;
     }
 
@@ -29,7 +34,29 @@ class Session {
         });
     }
 
-    destroy(sessionId, callback) {
+    getUserAuthentication(req, callback) {
+        let cookies = CookieMonster.nom(req);
+
+        // TODO:  Abstract this.  repeats a few times.
+        if(!(cookies.hasOwnProperty("SESSIONID") && cookies.hasOwnProperty("USERID"))) {
+            callback(false);
+            return;
+        }
+
+        sessionPath = storePath + cookies.SESSIONID;
+
+        fs.readFile(sessionPath, "utf8", (err, cipherContents) => {
+           if(err) {
+               callback(false);
+               return;
+           }
+
+           let cipherUsername = new CryptKeeper().hash(cookies.USERID, cookies.USERID);
+           callback(cipherUsername === cipherContents);
+        });
+    }
+
+    destroy(sessionId, callback = () => {}) {
         sessionPath = storePath + sessionId;
         fs.exists(sessionPath, (exists) => {
             if(!exists) {

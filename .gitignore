@@ -1,3 +1,5 @@
 .idea
 **/_secure/stores/sessions/*
 **/_secure/stores/users/*
+**/_secure/stores/configurations.json
+npm-debug.log

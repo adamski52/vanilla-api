@@ -84,14 +84,10 @@ class User {
         });
     }
 
-
     destroySession(req, callback) {
         let cookies = CookieMonster.nom(req);
         if(cookies.hasOwnProperty("SESSIONID")) {
-            session.destroy(cookies.SESSIONID, () => {
-                callback(undefined, cookies.SESSIONID);
-            });
-            return;
+            session.destroy(cookies.SESSIONID);
         }
 
         callback();

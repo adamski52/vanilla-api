@@ -9,7 +9,7 @@ let User,
         methods: ["POST"]
     }];
 
-class UsersController extends ApiController {
+class LoginController extends ApiController {
     constructor(_r, _User = require("../Services/User")) {
         super();
         router = _r;
@@ -30,9 +30,10 @@ class UsersController extends ApiController {
                 return this.fail(res, err);
             }
 
-            user.destroySession(req, (err, oldSessionId) => {
+            user.destroySession(req, () => {
                 res.setHeader("Set-Cookie", [
-                    "SESSIONID=" + sessionId
+                    "SESSIONID=" + sessionId + ";path=/",
+                    "USERID=" + body.username + ";path=/"
                 ]);
 
                 res.end(JSON.stringify(userObj));
@@ -41,12 +42,11 @@ class UsersController extends ApiController {
     }
 
     delete(req, res, params, body) {
-        user.destroySession(req, (err, oldSessionId) => {
-            if(oldSessionId) {
-                res.setHeader("Set-Cookie", [
-                    "SESSIONID=" + oldSessionId + "; expires=" + new Date(0).toUTCString(),
-                ]);
-            }
+        user.destroySession(req, () => {
+            res.setHeader("Set-Cookie", [
+                "SESSIONID=; expires=" + new Date(0).toUTCString() + ";path=/",
+                "USERID=; expires=" + new Date(0).toUTCString() + ";path=/"
+            ]);
 
             res.writeHead(204);
 
@@ -56,4 +56,4 @@ class UsersController extends ApiController {
     }
 }
 
-module.exports = UsersController;
+module.exports = LoginController;

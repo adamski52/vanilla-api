@@ -3,11 +3,13 @@ const https = require("https"),
       crypto = require("crypto"),
       Router = require("./Router"),
       UsersController = require("../API/Controllers/UsersController"),
-      LoginController = require("../API/Controllers/LoginController");
+      LoginController = require("../API/Controllers/LoginController"),
+      ConfigurationController = require("../API/Controllers/ConfigurationController");
 
 let router = new Router(),
     usersController = new UsersController(router),
-    loginController = new LoginController(router);
+    loginController = new LoginController(router),
+    configurationController = new ConfigurationController(router);
 
 module.exports = {
     start(port = 4242) {
