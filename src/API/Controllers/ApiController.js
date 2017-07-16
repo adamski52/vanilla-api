@@ -14,7 +14,9 @@ function parseReqBody(req, callback) {
 class ApiController {
     constructor(router, routeConfigs) {
         routeConfigs.forEach((route) => {
-            router.addRoute(route, this.routeRequest);
+            router.addRoute(route, (req, res) => {
+                this.routeRequest(req, res);
+            });
         });
     }
 

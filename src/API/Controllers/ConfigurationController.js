@@ -3,8 +3,7 @@ const ApiController = require("./ApiController");
 let session,
     configuration,
     routeConfigs = [{
-        pattern: "/api/configurations",
-        methods: ["GET", "POST", "PUT", "DELETE"]
+        pattern: "/api/configurations"
     }];
 
 class ConfigurationController extends ApiController {
@@ -62,7 +61,16 @@ class ConfigurationController extends ApiController {
     }
 
     delete(req, res, body) {
-        res.end("lol");
+        this.requireAuthentication(req, res, session, () => {
+            configuration.destroy(body, (err) => {
+                if(err) {
+                    this.fail(res, err);
+                    return;
+                }
+
+                res.end();
+            });
+        });
     }
 }
 

@@ -3,8 +3,7 @@ const ApiController = require("./ApiController");
 let user,
     CookieMonster,
     routeConfigs = [{
-        pattern: "/api/users",
-        methods: ["POST", "GET"]
+        pattern: "/api/users"
     }];
 
 class UsersController extends ApiController {

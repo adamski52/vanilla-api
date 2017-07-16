@@ -5,14 +5,14 @@ function isWellFormed(body) {
     return body && body.name && body.hostname && body.port && body.username;
 }
 
-function save(contents, config, callback) {
+function save(contents, callback) {
     fs.writeFile(storePath, contents, (err) => {
         if(err) {
             callback(err);
             return;
         }
 
-        callback(undefined, config, true);
+        callback(undefined);
     });
 }
 
@@ -75,7 +75,14 @@ class Configuration {
                 return;
             }
 
-            save(JSON.stringify(contents.configurations), config, callback);
+            save(JSON.stringify(contents.configurations), (err) => {
+                if(err) {
+                    callback(err);
+                    return;
+                }
+
+                callback(undefined, config);
+            });
         });
     }
 
@@ -105,7 +112,43 @@ class Configuration {
             }
 
             contents.configurations.push(config);
-            save(JSON.stringify(contents.configurations), config, callback);
+            save(JSON.stringify(contents.configurations), (err) => {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+
+                callback(undefined, config, true);
+            });
+        });
+    }
+
+    destroy(body, callback) {
+        if(!(body && body.name)) {
+            callback({
+                message: "Invalid configuration."
+            });
+            return;
+        }
+
+        this.get((err, contents) => {
+            let config;
+
+            for(let i = contents.configurations.length - 1; i >= 0; i--) {
+                config = contents.configurations[i];
+                if(config.name === body.name) {
+                    contents.configurations.splice(i, 1);
+                }
+            }
+
+            save(JSON.stringify(contents.configurations), (err) => {
+                if(err) {
+                    callback(err);
+                    return;
+                }
+
+                callback();
+            });
         });
     }
 }

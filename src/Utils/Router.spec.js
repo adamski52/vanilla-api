@@ -13,8 +13,7 @@ let router = new Router(),
     };
 
 routes = router.addRoute({
-    pattern: "/hello/world",
-    methods: ["GET"]
+    pattern: "/hello/world"
 }, (req, res, params) => {});
 TestRunner.run("Should add a route", routes.length, assert.strictEqual, 2);
 
@@ -23,11 +22,9 @@ TestRunner.run("Should add a route", routes.length, assert.strictEqual, 2);
 
 
 routes = router.addRoute({
-    pattern: "/hello/world",
-    methods: ["GET", "PUT"]
+    pattern: "/hello/world"
 }, (req, res, params) => {});
 
-TestRunner.run("Should update route methods", routes[0].methods.length, assert.strictEqual, 2);
 TestRunner.run("Should not recreate routes", routes.length, assert.strictEqual, 2);
 
 
@@ -36,14 +33,12 @@ TestRunner.run("Should not recreate routes", routes.length, assert.strictEqual, 
 
 canary = undefined;
 router.addRoute({
-    pattern: "/hello/world",
-    methods: ["GET"]
+    pattern: "/hello/world"
 }, (req, res, params) => {
     canary = false;
 });
 router.addRoute({
-    pattern: "/hello/world",
-    methods: ["GET"]
+    pattern: "/hello/world"
 }, (req, res, params) => {
     canary = true;
 });
@@ -70,8 +65,7 @@ TestRunner.run("Should 404 if no matching route", res.statusCode, assert.strictE
 
 
 routes = router.addRoute({
-    pattern: "/hello/world",
-    methods: ["GET", "POST"]
+    pattern: "/hello/world"
 }, (req, res, params) => {});
 TestRunner.run("Should allow the same route with different methods", routes.length, assert.strictEqual, 2);
 

@@ -1,7 +1,6 @@
 let routes = [],
     routeConfigs = [{
-        pattern: "(.*)",
-        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+        pattern: "(.*)"
     }];
 
 function getRoute(path) {
@@ -29,7 +28,6 @@ class Router {
         if(route) {
             route.handler = handler;
             route.pattern = routeOptions.pattern;
-            route.methods = routeOptions.methods;
             return routes;
         }
 
