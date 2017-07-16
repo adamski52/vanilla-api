@@ -2,6 +2,7 @@ const ApiController = require("./ApiController");
 
 let User,
     router,
+    CookieMonster,
     routeConfigs = [{
         key: "users_url",
         pattern: "/api/users",
@@ -9,10 +10,11 @@ let User,
     }];
 
 class UsersController extends ApiController {
-    constructor(_r, _User = require("../Models/User")) {
+    constructor(_r, _User = require("../Services/User"), _CookieMonster = require("../../Utils/CookieMonster")) {
         super();
         router = _r;
         User = _User;
+        CookieMonster = _CookieMonster;
 
         routeConfigs.forEach((route) => {
             router.addRoute(route, (req, res, params) => {
@@ -22,20 +24,17 @@ class UsersController extends ApiController {
     }
 
 
-    get(req, res, params) {
-        res.end("HI!");
-    }
-
     post(req, res, params, body) {
         body = JSON.parse(body);
 
         let user = new User();
-        user.login(body.username, body.password, (err, userObj) => {
+        user.create(body.username, body.password, (err, createdUser) => {
             if(err) {
                 return this.fail(res, err);
             }
 
-            res.end(JSON.stringify(userObj));
+            res.writeHead(201);
+            res.end(JSON.stringify(createdUser));
         });
     }
 }

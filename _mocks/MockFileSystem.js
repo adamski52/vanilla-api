@@ -11,5 +11,8 @@ module.exports = {
         mockData = data;
 
         callback();
+    },
+    exists: function(file, callback) {
+        callback(false);
     }
 };

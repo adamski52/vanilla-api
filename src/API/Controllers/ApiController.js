@@ -25,9 +25,9 @@ class ApiController {
         res.end();
     }
 
-    fail(res, err) {
-        res.statusCode = 400;
-        res.end(err.message);
+    fail(res, err, statusCode = 400) {
+        res.statusCode = statusCode;
+        res.end(err.message || "An error occurred.");
     }
 
 
