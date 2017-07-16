@@ -12,7 +12,7 @@ class LoginController extends ApiController {
         user = new User();
     }
 
-    post(req, res, body) {
+    post(req, res, params, body) {
         user.login(body.username, body.password, (err, userObj, sessionId) => {
             if (err) {
                 return this.fail(res, err);
@@ -29,7 +29,7 @@ class LoginController extends ApiController {
         });
     }
 
-    delete(req, res) {
+    delete(req, res, params, body) {
         user.destroySession(req, () => {
             res.setHeader("Set-Cookie", [
                 "SESSIONID=; expires=" + new Date(0).toUTCString() + ";path=/",

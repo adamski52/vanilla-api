@@ -40,9 +40,9 @@ DELETE /api/users/login
 
 No payload necessary (uses session cookie)
 
+
 ## Configuration Read (all) (must be authenticated)
 GET /api/configurations
-
 
 
 ## Configuration Create (must be authenticated)
@@ -93,7 +93,7 @@ Using Node.js (and Node.js only) create a REST compliant API with routes that al
 2.  Logout
 
 
-### Configurations
+### Configurations (complete)
 Building on the previous question, using Node.js (and Node.js only) create a REST compliant API with routes that allow an authenticated user to:
 
 1.  Retrieve server configurations as JSON data​ (using the below as a sample)

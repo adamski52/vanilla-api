@@ -71,3 +71,17 @@ TestRunner.run("Should allow the same route with different methods", routes.leng
 
 
 
+canary = undefined;
+routes = router.addRoute({
+    pattern: "/hello/world/([0-9]+)/(.+)",
+}, (req, res, params) => {
+    canary = params;
+});
+router.handleRequest({
+    url: "/hello/world/12345/something",
+    method: "GET"
+});
+
+let result = canary[1] == 12345 && canary[2] === "something";
+TestRunner.run("Should extract variables", result, assert.strictEqual, true);
+

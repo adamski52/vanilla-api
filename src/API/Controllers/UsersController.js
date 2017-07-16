@@ -17,7 +17,7 @@ class UsersController extends ApiController {
     }
 
 
-    post(req, res, body) {
+    post(req, res, params, body) {
         body = JSON.parse(body);
         user.create(body.username, body.password, (err, createdUser) => {
             if (err) {
