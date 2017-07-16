@@ -21,7 +21,7 @@ class Configuration {
         fs = _fs;
     }
 
-    getAll(callback) {
+    get(callback) {
         fs.readFile(storePath, "utf8", (err, contents) => {
            if(err) {
                callback(err);
@@ -40,26 +40,6 @@ class Configuration {
         });
     }
 
-    getByName(name, callback) {
-        this.getAll((err, allConfigs) => {
-            if(err) {
-                callback(err);
-                return;
-            }
-
-            // would normally polyfill .filter()
-            let matches = allConfigs.configurations.filter((c) => {
-                return c.name === name;
-            });
-
-            let configurations = {
-                configurations: matches
-            };
-
-            callback(undefined, configurations);
-        });
-    }
-
     update(body, callback) {
         if(!isWellFormed(body)) {
             callback({
@@ -68,20 +48,34 @@ class Configuration {
             return;
         }
 
-        this.getAll((err, configurations) => {
+        this.get((err, contents) => {
             if(err) {
                 callback(err);
                 return;
             }
 
-            for(let i = 0, il = configurations.configurations.length; i < il; i++) {
-               if(configurations.configurations[i].name === body.name) {
-                   configurations.configurations[i] = body;
-                   return;
+            let found = false,
+                config;
+            for(let i = 0, il = contents.configurations.length; i < il; i++) {
+               config = contents.configurations[i];
+
+               if(config.name === body.name) {
+                   found = true;
+                   config.hostname = body.hostname;
+                   config.username = body.username;
+                   config.port = body.port;
+                   break;
                }
             }
 
-            save(JSON.stringify(contents.configurations), body, callback);
+            if(!found) {
+                callback({
+                    message: "Item does not exist."
+                });
+                return;
+            }
+
+            save(JSON.stringify(contents.configurations), config, callback);
         });
     }
 
@@ -100,20 +94,12 @@ class Configuration {
             username: body.username
         };
 
-        this.getAll((err, contents) => {
-            let matchFound = false;
+        this.get((err, contents) => {
+            let match = contents.configurations.find((c) => {
+                return c.name === config.name;
+            });
 
-            // would normally polyfill .find()
-            for(let i = 0, il = contents.configurations.length; i < il; i++) {
-
-                // i'm saying that the name is the primary/unique key since the object has no other ID
-                if(contents.configurations[i].name === config.name) {
-                    matchFound = true;
-                    break;
-                }
-            }
-
-            if(matchFound) {
+            if(match) {
                 callback(undefined, config, false);
                 return;
             }

@@ -3,7 +3,6 @@ const ApiController = require("./ApiController");
 let session,
     configuration,
     routeConfigs = [{
-        key: "configuration_url",
         pattern: "/api/configurations",
         methods: ["GET", "POST", "PUT", "DELETE"]
     }];
@@ -21,13 +20,26 @@ class ConfigurationController extends ApiController {
 
     get(req, res, params, body) {
         this.requireAuthentication(req, res, session, () => {
-            configuration.getAll((err, contents) => {
+            configuration.get((err, contents) => {
                 if(err) {
                     this.fail(res, err);
                     return;
                 }
 
                 res.end(JSON.stringify(contents));
+            });
+        });
+    }
+
+    put(req, res, params, body) {
+        this.requireAuthentication(req, res, session, () => {
+            configuration.update(body, (err, config) => {
+                if (err) {
+                    this.fail(res, err);
+                    return;
+                }
+
+                res.end(JSON.stringify(config));
             });
         });
     }

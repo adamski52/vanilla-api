@@ -1,20 +1,14 @@
 let routes = [],
     routeConfigs = [{
-        key: "root",
         pattern: "(.*)",
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
     }];
 
-function getRoute(path, method) {
+function getRoute(path) {
     return routes.find((route) => {
         let match = path.match(new RegExp(route.pattern + "$"));
         return match;
     });
-}
-
-function handle404(req, res, params) {
-    res.statusCode = 404;
-    res.end();
 }
 
 function execute(route, req, res) {
@@ -26,7 +20,10 @@ function execute(route, req, res) {
 class Router {
     constructor() {
         routeConfigs.forEach((route) => {
-            this.addRoute(route, handle404);
+            this.addRoute(route, (req, res) => {
+                res.statusCode = 404;
+                res.end();
+            });
         });
     }
 
@@ -38,11 +35,9 @@ class Router {
         if(route) {
             route.handler = handler;
             route.pattern = routeOptions.pattern;
-            route.key = routeOptions.key;
             route.methods = routeOptions.methods;
             return routes;
         }
-
 
         routeOptions.handler = handler;
         routes.unshift(routeOptions);
@@ -51,7 +46,7 @@ class Router {
     }
 
     handleRequest(req, res) {
-        let route = getRoute(req.url, req.method);
+        let route = getRoute(req.url);
         execute(route, req, res);
     }
 }

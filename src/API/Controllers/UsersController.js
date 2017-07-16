@@ -1,32 +1,25 @@
 const ApiController = require("./ApiController");
 
-let User,
-    router,
+let user,
     CookieMonster,
     routeConfigs = [{
-        key: "users_url",
         pattern: "/api/users",
         methods: ["POST", "GET"]
     }];
 
 class UsersController extends ApiController {
-    constructor(_r, _User = require("../Services/User"), _CookieMonster = require("../../Utils/CookieMonster")) {
-        super();
-        router = _r;
-        User = _User;
-        CookieMonster = _CookieMonster;
+    constructor(router,
+                User = require("../Services/User"),
+                _CookieMonster = require("../../Utils/CookieMonster")) {
 
-        routeConfigs.forEach((route) => {
-            router.addRoute(route, (req, res, params) => {
-                this.routeRequest(req, res, params);
-            });
-        });
+        super(router, routeConfigs);
+        user = new User();
+        CookieMonster = _CookieMonster;
     }
 
 
     post(req, res, params, body) {
         body = JSON.parse(body);
-        let user = new User();
         user.create(body.username, body.password, (err, createdUser) => {
             if (err) {
                 return this.fail(res, err);

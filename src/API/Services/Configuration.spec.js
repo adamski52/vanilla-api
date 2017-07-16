@@ -96,11 +96,11 @@ configuration.create(configObj, (err, config, isNew) => {
 });
 
 configuration.create(Object.assign({}, configObj, {ip: "127.0.0.1"}), (err, config, isNew) => {
-    TestRunner.run("Create should toss info we don't care about", JSON.stringify(configObj), assert.strictEqual, JSON.stringify(config));
+    TestRunner.run("Create should toss info we don't care about", JSON.stringify(config), assert.strictEqual, JSON.stringify(configObj));
 });
 
 configuration.update(Object.assign({}, configObj, {ip: "127.0.0.1"}), (err, config, isNew) => {
-    TestRunner.run("Update should toss info we don't care about", JSON.stringify(configObj), assert.strictEqual, JSON.stringify(config));
+    TestRunner.run("Update should toss info we don't care about", JSON.stringify(config), assert.strictEqual, JSON.stringify(configObj));
 });
 
 configuration.create(Object.assign({}, configObj, {
@@ -117,14 +117,8 @@ configuration.create({
     port: 4242,
     username: "adamski"
 }, (err, config) => {
-    configuration.getAll((err, configurations) => {
+    configuration.get((err, configurations) => {
         TestRunner.run("Should return all configurations", configurations.configurations.length, assert.strictEqual, 2);
-    });
-
-    configuration.getByName("host123", (err, configurations) => {
-        let properLength = configurations.configurations.length === 1,
-            properObject = JSON.stringify(configurations.configurations[0]) === JSON.stringify(configObj);
-        TestRunner.run("Should return configurations matching a specified name", properLength && properObject, assert.strictEqual, true);
     });
 });
 
@@ -137,7 +131,7 @@ configObj = {
 configuration.update(configObj, (err, config) => {
     TestRunner.run("Should return the updated item", JSON.stringify(config), assert.strictEqual, JSON.stringify(configObj));
 
-    configuration.getAll((err, configurations) => {
+    configuration.get((err, configurations) => {
         let properObject = JSON.stringify(configurations.configurations[0]) === JSON.stringify(configObj);
         TestRunner.run("Should update response within all configurations", properObject, assert.strictEqual, true);
     });

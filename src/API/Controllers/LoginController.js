@@ -1,18 +1,15 @@
 const ApiController = require("./ApiController");
 
-let User,
-    user,
+let user,
     routeConfigs = [{
-        key: "users_login_url",
         pattern: "/api/users/login",
         methods: ["POST"]
     }];
 
 class LoginController extends ApiController {
-    constructor(router, _User = require("../Services/User")) {
+    constructor(router, User = require("../Services/User")) {
         super(router, routeConfigs);
 
-        User = _User;
         user = new User();
     }
 

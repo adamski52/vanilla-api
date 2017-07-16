@@ -16,9 +16,7 @@ module.exports = {
         https.createServer({
             key: fs.readFileSync("_secure/keys/key.pem"),
             cert: fs.readFileSync("_secure/keys/cert.pem")
-        }, (req, res) => {
-            router.handleRequest(req, res);
-        }).listen(port);
+        }, router.handleRequest).listen(port);
 
         console.log("server running on :" + port);
     }
