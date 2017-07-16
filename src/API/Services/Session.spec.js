@@ -3,6 +3,8 @@ const assert = require("assert"),
       Session = require("./Session"),
       CryptKeeper = require("../../Utils/CryptKeeper");
 
+TestRunner.setContext("Sessions");
+
 let writtenData,
     mockFs = {
         existsSync: function(filename) {

@@ -14,14 +14,14 @@ class Configuration {
            }
 
            if(!contents) {
-               contents = [];
+               contents = "[]";
            }
 
-           contents = {
+           let configurations = {
                configurations: JSON.parse(contents)
-           }
+           };
 
-           callback(err, contents);
+           callback(err, configurations);
         });
     }
 

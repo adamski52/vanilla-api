@@ -2,6 +2,8 @@ const assert = require("assert"),
     TestRunner = require("./TestRunner"),
     Router = require("./Router");
 
+TestRunner.setContext("Router");
+
 let router = new Router(),
     routes,
     canary,

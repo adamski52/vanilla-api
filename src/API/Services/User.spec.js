@@ -3,6 +3,8 @@ const assert = require("assert"),
       User = require("./User"),
       fs = require("fs");
 
+TestRunner.setContext("Users");
+
 let user = new User();
 
 

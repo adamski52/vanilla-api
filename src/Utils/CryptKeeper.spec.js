@@ -2,6 +2,7 @@ const assert = require("assert"),
     TestRunner = require("./TestRunner"),
     CryptKeeper = require("./CryptKeeper");
 
+TestRunner.setContext("CryptKeeper");
 
 let mockData;
 TestRunner.beforeEach(() => {
