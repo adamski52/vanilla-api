@@ -1,7 +1,6 @@
 const ApiController = require("./ApiController");
 
 let User,
-    router,
     user,
     routeConfigs = [{
         key: "users_login_url",
@@ -10,18 +9,11 @@ let User,
     }];
 
 class LoginController extends ApiController {
-    constructor(_r, _User = require("../Services/User")) {
-        super();
-        router = _r;
+    constructor(router, _User = require("../Services/User")) {
+        super(router, routeConfigs);
+
         User = _User;
         user = new User();
-
-
-        routeConfigs.forEach((route) => {
-            router.addRoute(route, (req, res, params) => {
-                this.routeRequest(req, res, params);
-            });
-        });
     }
 
     post(req, res, params, body) {

@@ -12,6 +12,14 @@ function parseReqBody(req, callback) {
 
 
 class ApiController {
+    constructor(router, routeConfigs) {
+        routeConfigs.forEach((route) => {
+            router.addRoute(route, (req, res, params) => {
+                this.routeRequest(req, res, params);
+            });
+        });
+    }
+
     routeRequest(req, res, params) {
         let method = req.method.toLowerCase();
         if(this[method]) {

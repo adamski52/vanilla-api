@@ -1,6 +1,21 @@
 let fs,
     storePath = "_secure/stores/configurations.json";
 
+function isWellFormed(body) {
+    return body && body.name && body.hostname && body.port && body.username;
+}
+
+function save(contents, config, callback) {
+    fs.writeFile(storePath, contents, (err) => {
+        if(err) {
+            callback(err);
+            return;
+        }
+
+        callback(undefined, config, true);
+    });
+}
+
 class Configuration {
     constructor(_fs = require("fs")) {
         fs = _fs;
@@ -21,12 +36,57 @@ class Configuration {
                configurations: JSON.parse(contents)
            };
 
-           callback(err, configurations);
+           callback(undefined, configurations);
+        });
+    }
+
+    getByName(name, callback) {
+        this.getAll((err, allConfigs) => {
+            if(err) {
+                callback(err);
+                return;
+            }
+
+            // would normally polyfill .filter()
+            let matches = allConfigs.configurations.filter((c) => {
+                return c.name === name;
+            });
+
+            let configurations = {
+                configurations: matches
+            };
+
+            callback(undefined, configurations);
+        });
+    }
+
+    update(body, callback) {
+        if(!isWellFormed(body)) {
+            callback({
+                message: "Invalid configuration."
+            });
+            return;
+        }
+
+        this.getAll((err, configurations) => {
+            if(err) {
+                callback(err);
+                return;
+            }
+
+            for(let i = 0, il = configurations.configurations.length; i < il; i++) {
+               if(configurations.configurations[i].name === body.name) {
+                   configurations.configurations[i] = body;
+                   return;
+               }
+            }
+
+            save(JSON.stringify(contents.configurations), body, callback);
         });
     }
 
     create(body, callback) {
-        if(!(body.name && body.hostname && body.port && body.username)) {
+        if(!isWellFormed(body)) {
             callback({
                 message: "Invalid configuration."
             });
@@ -40,12 +100,14 @@ class Configuration {
             username: body.username
         };
 
-        let configStr = JSON.stringify(config);
-
         this.getAll((err, contents) => {
             let matchFound = false;
+
+            // would normally polyfill .find()
             for(let i = 0, il = contents.configurations.length; i < il; i++) {
-                if(JSON.stringify(contents.configurations[i]) === configStr) {
+
+                // i'm saying that the name is the primary/unique key since the object has no other ID
+                if(contents.configurations[i].name === config.name) {
                     matchFound = true;
                     break;
                 }
@@ -57,14 +119,7 @@ class Configuration {
             }
 
             contents.configurations.push(config);
-            fs.writeFile(storePath, JSON.stringify(contents.configurations), (err) => {
-               if(err) {
-                   callback(err);
-                   return;
-               }
-
-               callback(undefined, config, true);
-            });
+            save(JSON.stringify(contents.configurations), config, callback);
         });
     }
 }
