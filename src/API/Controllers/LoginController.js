@@ -25,14 +25,6 @@ class UsersController extends ApiController {
     }
 
     post(req, res, params, body) {
-        if(!body || !body.username || !body.password) {
-            this.fail(res, {
-                message: "Username and password are required."
-            });
-            return;
-        }
-
-
         user.login(body.username, body.password, (err, userObj, sessionId) => {
             if (err) {
                 return this.fail(res, err);

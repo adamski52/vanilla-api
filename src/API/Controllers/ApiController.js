@@ -16,7 +16,13 @@ class ApiController {
         let method = req.method.toLowerCase();
         if(this[method]) {
             parseReqBody(req, (body) => {
-                this[method](req, res, params, body);
+                try {
+                    this[method](req, res, params, body);
+                }
+                catch(err) {
+                    this.fail(res, err);
+                    return;
+                }
             });
             return;
         }
