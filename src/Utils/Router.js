@@ -11,12 +11,6 @@ function getRoute(path) {
     });
 }
 
-function execute(route, req, res) {
-    let params = req.url.match(route.pattern);
-
-    route.handler(req, res, params);
-}
-
 class Router {
     constructor() {
         routeConfigs.forEach((route) => {
@@ -47,7 +41,7 @@ class Router {
 
     handleRequest(req, res) {
         let route = getRoute(req.url);
-        execute(route, req, res);
+        route.handler(req, res);
     }
 }
 

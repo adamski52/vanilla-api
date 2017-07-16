@@ -14,13 +14,11 @@ function parseReqBody(req, callback) {
 class ApiController {
     constructor(router, routeConfigs) {
         routeConfigs.forEach((route) => {
-            router.addRoute(route, (req, res, params) => {
-                this.routeRequest(req, res, params);
-            });
+            router.addRoute(route, this.routeRequest);
         });
     }
 
-    routeRequest(req, res, params) {
+    routeRequest(req, res) {
         let method = req.method.toLowerCase();
         if(this[method]) {
             parseReqBody(req, (body) => {
@@ -29,7 +27,7 @@ class ApiController {
                         body = JSON.parse(body);
                     }
 
-                    this[method](req, res, params, body);
+                    this[method](req, res, body);
                 }
                 catch(err) {
                     this.fail(res, err);
@@ -53,11 +51,11 @@ class ApiController {
 
 
     // http spec specifies that the server must at a minimum respond to HEAD and GET
-    head(req, res, params) {
+    head(req, res, body) {
         res.end();
     }
 
-    get(req, res, params) {
+    get(req, res, body) {
         res.end();
     }
 

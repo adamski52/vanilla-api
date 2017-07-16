@@ -18,7 +18,7 @@ class ConfigurationController extends ApiController {
         configuration = new Configuration();
     }
 
-    get(req, res, params, body) {
+    get(req, res, body) {
         this.requireAuthentication(req, res, session, () => {
             configuration.get((err, contents) => {
                 if(err) {
@@ -31,7 +31,7 @@ class ConfigurationController extends ApiController {
         });
     }
 
-    put(req, res, params, body) {
+    put(req, res, body) {
         this.requireAuthentication(req, res, session, () => {
             configuration.update(body, (err, config) => {
                 if (err) {
@@ -44,7 +44,7 @@ class ConfigurationController extends ApiController {
         });
     }
 
-    post(req, res, params, body) {
+    post(req, res, body) {
         this.requireAuthentication(req, res, session, () => {
             configuration.create(body, (err, config, wasCreated) => {
                 if(err) {
@@ -59,6 +59,10 @@ class ConfigurationController extends ApiController {
                 res.end(JSON.stringify(config));
             });
         });
+    }
+
+    delete(req, res, body) {
+        res.end("lol");
     }
 }
 
