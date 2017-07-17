@@ -23,6 +23,8 @@ With payload of:
 }
 ```
 
+**Note:  The user above already exists and you may use this account if you do not wish to create your own.**
+
 
 ## User Login
 POST /api/users/login
