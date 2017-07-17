@@ -1,18 +1,32 @@
 let routes = [],
     routeConfigs = [{
-        pattern: "(.*)"
+        pattern: /(.*)/g
     }];
 
 function getRoute(path) {
     return routes.find((route) => {
-        let match = path.match(new RegExp(route.pattern + "$"));
+        let match = path.match(route.pattern);
         return match;
     });
 }
 
 function execute(route, req, res) {
     let params = req.url.match(route.pattern);
-    route.handler(req, res, params);
+
+    params = params.filter((m) => {
+        return m !== "&"
+    });
+
+    let keyValueMap = {},
+        keyValuePair;
+
+    // have to skip the first since it's the base route
+    for(let i = 1, il = params.length; i < il; i++) {
+        keyValuePair = params[i].split("=");
+        keyValueMap[keyValuePair[0]] = keyValuePair[1];
+    }
+
+    route.handler(req, res, keyValueMap);
 }
 
 class Router {

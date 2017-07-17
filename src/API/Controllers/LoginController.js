@@ -2,7 +2,7 @@ const ApiController = require("./ApiController");
 
 let user,
     routeConfigs = [{
-        pattern: "/api/users/login"
+        pattern: /\/api\/users\/login/g
     }];
 
 class LoginController extends ApiController {
