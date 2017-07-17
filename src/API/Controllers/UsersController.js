@@ -8,11 +8,11 @@ let user,
 
 class UsersController extends ApiController {
     constructor(router,
-                User = require("../Services/User"),
+                UserService = require("../Services/UserService"),
                 _CookieMonster = require("../../Utils/CookieMonster")) {
 
         super(router, routeConfigs);
-        user = new User();
+        user = new UserService();
         CookieMonster = _CookieMonster;
     }
 

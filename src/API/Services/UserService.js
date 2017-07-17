@@ -27,14 +27,14 @@ function createUser(plaintextUsername, plaintextPassword, userFilePath, callback
     });
 }
 
-class User {
+class UserService {
     constructor(_fs = require("fs"),
                 CryptKeeper = require("../../Utils/CryptKeeper"),
-                Session = require("./Session"),
+                SessionService = require("./SessionService"),
                 _CookieMonster = require("../../Utils/CookieMonster")) {
         fs = _fs;
 
-        session =  new Session();
+        session =  new SessionService();
         cryptKeeper = new CryptKeeper();
         CookieMonster = _CookieMonster;
     }
@@ -94,4 +94,4 @@ class User {
     }
 }
 
-module.exports = User;
+module.exports = UserService;

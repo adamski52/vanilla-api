@@ -6,10 +6,11 @@ let user,
     }];
 
 class LoginController extends ApiController {
-    constructor(router, User = require("../Services/User")) {
+    constructor(router,
+                UserService = require("../Services/UserService")) {
         super(router, routeConfigs);
 
-        user = new User();
+        user = new UserService();
     }
 
     post(req, res, params, body) {

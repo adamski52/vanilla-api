@@ -5,7 +5,7 @@ let fs,
     CryptKeeper,
     storePath = "_secure/stores/sessions/";
 
-class Session {
+class SessionService {
     constructor(_fs = require("fs"),
                 _crypto = require("crypto"),
                 _CryptKeeper = require("../../Utils/CryptKeeper"),
@@ -71,4 +71,4 @@ class Session {
     }
 }
 
-module.exports = Session;
+module.exports = SessionService;

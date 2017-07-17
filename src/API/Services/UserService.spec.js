@@ -1,11 +1,11 @@
 const assert = require("assert"),
       TestRunner = require("../../Utils/TestRunner"),
-      User = require("./User"),
+      UserService = require("./UserService"),
       fs = require("fs");
 
 TestRunner.setContext("Users");
 
-let user = new User();
+let user = new UserService();
 
 
 function cleanupSessions(sessionKey) {

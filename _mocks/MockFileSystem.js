@@ -14,5 +14,8 @@ module.exports = {
     },
     exists: function(file, callback) {
         callback(false);
+    },
+    existsSync: function() {
+        return false;
     }
 };

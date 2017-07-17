@@ -1,10 +1,10 @@
 const assert = require("assert"),
     TestRunner = require("../../Utils/TestRunner"),
-    Configuration = require("./Configuration"),
+    ConfigurationService = require("./ConfigurationService"),
     mockFs = require("../../../_mocks/MockFileSystem"),
     TestHelpers = require("../../../_mocks/TestHelpers");
 
-let configuration = new Configuration(mockFs);
+let configuration = new ConfigurationService(mockFs);
 
 TestRunner.setContext("Configurations / pagination");
 

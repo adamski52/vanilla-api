@@ -8,13 +8,13 @@ let session,
 
 class ConfigurationController extends ApiController {
     constructor(router,
-                Session = require("../Services/Session"),
-                Configuration = require("../Services/Configuration")) {
+                SessionService = require("../Services/SessionService"),
+                ConfigurationService = require("../Services/ConfigurationService")) {
 
         super(router, routeConfigs);
 
-        session = new Session();
-        configuration = new Configuration();
+        session = new SessionService();
+        configuration = new ConfigurationService();
     }
 
     get(req, res, params, body) {

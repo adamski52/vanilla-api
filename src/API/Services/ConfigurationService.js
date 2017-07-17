@@ -17,7 +17,7 @@ function save(contents, callback) {
     });
 }
 
-function doesItemExist(contents) {
+function doesItemExist(contents, body) {
     let config;
     for (let i = 0, il = contents.configurations.length; i < il; i++) {
         config = contents.configurations[i];
@@ -82,7 +82,7 @@ function paginate(contents, params) {
     return items;
 }
 
-class Configuration {
+class ConfigurationService {
     constructor(_fs = require("fs")) {
         fs = _fs;
     }
@@ -121,7 +121,7 @@ class Configuration {
                 return;
             }
 
-            let config = doesItemExist(contents);
+            let config = doesItemExist(contents, body);
 
             if(!config) {
                 callback({
@@ -210,4 +210,4 @@ class Configuration {
 
 }
 
-module.exports = Configuration;
+module.exports = ConfigurationService;
