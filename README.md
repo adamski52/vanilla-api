@@ -3,7 +3,8 @@
 2.  Don't bother running `npm install` - there are no dependencies of any sort
 3.  If you're on a Mac, run `npm test` if you want to see the Testing Framework I put together do its magic.  The command doesn't work on Windows.  You can run the individual `*.spec.js` files individually if you'd like (`node path/to/file.spec.js`).
 4.  You may need to install the `_secure/keys/cert.pem` to your browser or REST client in order for it to accept the insecure SSL connection.  If you need to fiddle with the certificate at all, it's not password protected.
-    1.  Also, you may need to visit the a route like `GET /api/users` and tell Chrome to go anyway before it behaves.
+    1.  Also, you may need to visit a route like `GET /api/users` and tell your browser that you accept the security risk before your REST client behaves.
+        * Using Advanced REST Client for Chrome, you'll need to do this as well as toggle on the "Use XHR" option.  If it asks you to install the cookie extension, you'll need to do that as well.
 5.  Run `npm start` to start up the server.  Port `:4242` needs to be open.
 6.  Once started, you should be able to hit the following endpoints, given that all URLs are relative to "https://localhost:4242" (**https**, not http).
 7.  Try playing with invalid URLs too... Method Not Allowed, Not Found etc should work as well.
@@ -121,7 +122,7 @@ Use the following data as a guide for your records:
 }
 ```
 
-# Sorting
+### Sorting (complete)
 Building on the previous question, using Node.js (and Node.js only) modify your REST compliant API routes to support:
 
 1. Sorting by name, hostname, port, or username
