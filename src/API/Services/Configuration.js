@@ -1,5 +1,6 @@
 let fs,
-    storePath = "_secure/stores/configurations.json";
+    storePath = "_secure/stores/configurations.json",
+    VALID_SORTS = ["name", "hostname", "port", "username"];
 
 function isWellFormed(body) {
     return body && body.name && body.hostname && body.port && body.username;
@@ -16,24 +17,74 @@ function save(contents, callback) {
     });
 }
 
+function sort(contents, params) {
+    if (!params.hasOwnProperty("sortby")) {
+        return contents;
+    }
+
+    let sortby = params.sortby;
+    if (VALID_SORTS.indexOf(sortby) < 0) {
+        return contents;
+    }
+
+
+    contents = contents.sort((lhs, rhs) => {
+        if (lhs[sortby] > rhs[sortby]) {
+            return 1;
+        }
+
+        if (lhs[sortby] < rhs[sortby]) {
+            return -1;
+        }
+
+        return 0;
+    });
+
+    return contents;
+}
+
+function paginate(contents, params) {
+    if(!(params.hasOwnProperty("page") && params.hasOwnProperty("per"))) {
+        return contents;
+    }
+
+
+    let page = parseInt(params.page, 10),
+        per = parseInt(params.per, 10);
+
+    page = page >= 0 ? page : 0;
+    per = per > 0 ? per : 5;
+
+    let startItem = Math.min(per * page, contents.length),
+        endItem = Math.min(startItem + per, contents.length),
+        items = [];
+
+    for(let i = startItem; i < endItem; i++) {
+        items.push(contents[i]);
+    }
+
+    return items;
+}
+
 class Configuration {
     constructor(_fs = require("fs")) {
         fs = _fs;
     }
 
-    get(callback) {
+    get(callback, params = {}) {
         fs.readFile(storePath, "utf8", (err, contents) => {
            if(err) {
                callback(err);
                return;
            }
 
-           if(!contents) {
-               contents = "[]";
-           }
+           contents = contents ? JSON.parse(contents) : [];
+
+           contents = sort(contents, params);
+           contents = paginate(contents, params);
 
            let configurations = {
-               configurations: JSON.parse(contents)
+               configurations: contents
            };
 
            callback(undefined, configurations);
@@ -151,6 +202,8 @@ class Configuration {
             });
         });
     }
+
+
 }
 
 module.exports = Configuration;

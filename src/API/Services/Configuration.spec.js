@@ -136,6 +136,3 @@ configuration.update(configObj, (err, config) => {
         TestRunner.run("Should update response within all configurations", properObject, assert.strictEqual, true);
     });
 });
-
-
-

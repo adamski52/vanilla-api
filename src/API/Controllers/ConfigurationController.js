@@ -1,5 +1,4 @@
-const ApiController = require("./ApiController"),
-      VALID_SORTS = ["name", "hostname", "port", "username"];
+const ApiController = require("./ApiController");
 
 let session,
     configuration,
@@ -26,42 +25,8 @@ class ConfigurationController extends ApiController {
                     return;
                 }
 
-                let items = [];
-
-                if(params.hasOwnProperty("sortby")) {
-                    let sortby = params.sortby;
-
-                    if(VALID_SORTS.indexOf(sortby) >= 0) {
-                        contents = contents.sort((lhs, rhs) => {
-                            if (lhs[sortby] > rhs[sortby]) {
-                                return -1;
-                            }
-
-                            if (lhs[sortby] < rhs[sortby]) {
-                                return 1;
-                            }
-
-                            return 0;
-                        });
-                    }
-                }
-
-                if(params.hasOwnProperty("page") && params.hasOwnProperty("per")) {
-                    let page = parseInt(params.page, 10) || 0,
-                        per = parseInt(params.per, 10) || 5,
-                        startItem = Math.min(per * page, contents.length),
-                        endItem = Math.min(startItem + per, contents.length);
-
-                    for(let i = startItem; i < endItem; i++) {
-                        items.push(contents[i]);
-                    }
-                }
-                else {
-                    items = contents;
-                }
-
-                res.end(JSON.stringify(items));
-            });
+                res.end(JSON.stringify(contents));
+            }, params);
         });
     }
 
