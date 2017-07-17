@@ -17,6 +17,22 @@ function save(contents, callback) {
     });
 }
 
+function doesItemExist(contents) {
+    let config;
+    for (let i = 0, il = contents.configurations.length; i < il; i++) {
+        config = contents.configurations[i];
+
+        if (config.name === body.name) {
+            config.hostname = body.hostname;
+            config.username = body.username;
+            config.port = body.port;
+            return config;
+        }
+    }
+
+    return false;
+}
+
 function sort(contents, params) {
     if (!params.hasOwnProperty("sortby")) {
         return contents;
@@ -105,21 +121,9 @@ class Configuration {
                 return;
             }
 
-            let found = false,
-                config;
-            for(let i = 0, il = contents.configurations.length; i < il; i++) {
-               config = contents.configurations[i];
+            let config = doesItemExist(contents);
 
-               if(config.name === body.name) {
-                   found = true;
-                   config.hostname = body.hostname;
-                   config.username = body.username;
-                   config.port = body.port;
-                   break;
-               }
-            }
-
-            if(!found) {
+            if(!config) {
                 callback({
                     message: "Item does not exist."
                 });

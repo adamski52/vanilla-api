@@ -22,32 +22,31 @@ class ApiController {
 
     routeRequest(req, res, params) {
         let method = req.method.toLowerCase();
-        if(this[method]) {
-            parseReqBody(req, (body) => {
-                try {
-                    if(body) {
-                        body = JSON.parse(body);
-                    }
-
-                    this[method](req, res, params, body);
-                }
-                catch(err) {
-                    this.fail(res, err);
-                    return;
-                }
-            });
+        if(!this[method]) {
+            res.statusCode = 405;
+            res.end();
             return;
         }
 
-        res.statusCode = 405;
-        res.end();
+        parseReqBody(req, (body) => {
+            try {
+                if(body) {
+                    body = JSON.parse(body);
+                }
+
+                this[method](req, res, params, body);
+            }
+            catch(err) {
+                this.fail(res, err);
+                return;
+            }
+        });
     }
 
     fail(res, err, statusCode = 400) {
         res.statusCode = statusCode;
         res.end(JSON.stringify({
-            error: err.message || "An error occurred.",
-            stack: err.stack
+            error: err.message || "An error occurred."
         }));
     }
 
